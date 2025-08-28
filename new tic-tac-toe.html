@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fatima's Tic-Tac-Toe</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      background-color: #90e0ef;
+      text-align: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+
+    .container {
+      height: 65vh;
+      width: fit-content;
+      margin-left: 35%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 5px solid #344e41;
+      border-radius: 20px;
+    }
+
+    .Game {
+      height: 60vmin;
+      width: 60vmin;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5vmin;
+    }
+
+    .box {
+      height: 15vmin;
+      width: 15vmin;
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 0 16px #344e41;
+      color:black;
+      font-size: 50px;
+      background-color: white;
+      text-shadow: 0 0 15px gray;
+      cursor: pointer;
+    }
+
+    .heading {
+      font-size: 40px;
+      letter-spacing: 3px;
+      text-shadow: 0 0 15px #f9f9f9;
+    }
+
+    .para {
+      font-size: 20px;
+      letter-spacing: 2px;
+      padding: 12px;
+      color: white;
+      text-shadow:0 0 20px black;
+    }
+
+    .win {
+      color: goldenrod;
+      font-size: 20px;
+      text-shadow: 0 0 10px red;
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    .text {
+      display: grid;
+      place-items: center;
+      padding-top: 25px;
+    }
+
+    .new {
+      padding: 10px 25px;
+      font-size: 18px;
+      margin-top: 20px;
+      border-radius: 10px;
+      border: none;
+      background-color: black;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 5px #2f3e46;
+    }
+     /* .new {
+        position: relative;
+        top: 0px;
+        left: 45%;
+        padding: 8px;
+        width: 125px;
+        border-radius: 5px;
+        border: none; */
+        /* color: #ffff; */
+        /* font-weight: 600;
+        box-shadow: 2px 2px 15px black;
+        background-color: rgb(131, 224, 224);
+        cursor: pointer;
+      } */
+  </style>
+</head>
+<body>
+
+  <div class="text">
+    <p class="win" id="msg"></p> <!-- Initially blank -->
+    <h1 class="heading">Tic Tac Toe</h1>
+    <p class="para">...Let's Start Game...</p>
+  </div>
+
+  <div class="container">
+    <div class="Game">
+      <button type="button" class="box"></button>
+      <button type="button" class="box"></button>
+      <button type="button" class="box"></button>
+      <button type="button" class="box"></button>
+      <button type="button" class="box"></button>
+      <button type="button" class="box"></button>
+      <button type="button" class="box"></button>
+      <button type="button" class="box"></button>
+      <button type="button" class="box"></button>
+    </div>
+  </div>
+
+  <button type="button" class="new" id="restartBtn">Restart</button>
+
+  <script>
+    const boxes = document.querySelectorAll(".box");
+    const resetBtn = document.getElementById("restartBtn");
+    const msg = document.getElementById("msg");
+
+    let turnO = true; // true = O's turn, false = X's turn
+
+    const winPatterns = [
+      [0,1,2], [3,4,5], [6,7,8],
+      [0,3,6], [1,4,7], [2,5,8],
+      [0,4,8], [2,4,6]
+    ];
+
+    boxes.forEach((box) => {
+      box.addEventListener("click", () => {
+        if (box.innerText !== "") return;
+        box.innerText = turnO ? "O" : "X";
+        turnO = !turnO;
+        checkWinner();
+      });
+    });
+
+    const checkWinner = () => {
+      for (let pattern of winPatterns) {
+        let [a, b, c] = pattern;
+        let val1 = boxes[a].innerText;
+        let val2 = boxes[b].innerText;
+        let val3 = boxes[c].innerText;
+
+        if (val1 !== "" && val1 === val2 && val2 === val3) {
+          showWinner(val1);
+          disableBoxes();
+          return;
+        }
+      }
+    };
+
+    const showWinner = (winner) => {
+      msg.style.display = "block";
+      msg.innerText = `🎉 Winner is ${winner} 🎉`;
+    };
+
+    const disableBoxes = () => {
+      boxes.forEach((box) => box.disabled = true);
+    };
+
+    resetBtn.addEventListener("click", () => {
+      boxes.forEach((box) => {
+        box.innerText = "";
+        box.disabled = false;
+      });
+      msg.innerText = "";
+      msg.style.display = "none";
+      turnO = true;
+    });
+  </script>
+
+</body>
+</html>
